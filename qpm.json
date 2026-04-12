@@ -3,7 +3,7 @@
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
-    "name": "从心剑",
+    "name": "CongXinJian",
     "id": "CongXinJian",
     "version": "0.1.0",
     "url": null,
@@ -73,6 +73,11 @@
     {
       "id": "custom-types",
       "versionRange": "^0.18.0",
+      "additionalData": {}
+    },
+    {
+      "id": "paper2_scotland2",
+      "versionRange": "^4.7.0",
       "additionalData": {}
     }
   ]

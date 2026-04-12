@@ -77,9 +77,29 @@ jobs:
         qpm --version
 
     - name: QPM Restore
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         cd ${GITHUB_WORKSPACE}
         qpm restore
+
+    - name: Verify restored dependencies
+      run: |
+        echo "=== extern/libs/ contents ==="
+        ls -la ${GITHUB_WORKSPACE}/extern/libs/ || echo "extern/libs/ not found!"
+        echo ""
+        echo "=== extern.cmake exists? ==="
+        ls -la ${GITHUB_WORKSPACE}/extern.cmake || echo "extern.cmake not found!"
+        echo ""
+        echo "=== Check .so files are not empty ==="
+        for f in ${GITHUB_WORKSPACE}/extern/libs/*.so; do
+          size=$(stat --format=%s "$f" 2>/dev/null || echo "0")
+          echo "$f: ${size} bytes"
+          if [ "$size" -eq 0 ]; then
+            echo "ERROR: $f is empty!"
+            exit 1
+          fi
+        done
 
     - name: Build & Create Qmod
       run: |
