@@ -2,11 +2,9 @@
 
 [English](README.md)
 
-这个Mod可以用来快捷地在选歌界面来调整光剑的偏移
+这个Mod可以用来快捷地在选歌界面来调整光剑的偏移。整体基本参考 [Easy Offset](https://github.com/Reezonate/EasyOffset) 编写。
 
-This is an offset adjustment mod for Beat Saber on Quest, which helps you tweak your sabers more easily in-game. Heavily inspired by: [Easy Offset](https://github.com/Reezonate/EasyOffset)
-
-Wrote by lxtend with ~250M tokens(currently) of Claude opus 4.6.
+mod支持切换至中文显示，请在设置->最左侧的mod设置内自行切换。
 
 Use `qpm s build` to build
 Same goes for `qpm s copy` and `qpm s qmod`
