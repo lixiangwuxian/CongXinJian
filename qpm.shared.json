@@ -1,0 +1,244 @@
+{
+  "config": {
+    "version": "0.1.0",
+    "sharedDir": "shared",
+    "dependenciesDir": "extern",
+    "info": {
+      "name": "从心剑",
+      "id": "CongXinJian",
+      "version": "0.1.0",
+      "url": null,
+      "additionalData": {
+        "overrideSoName": "libCongXinJian.so",
+        "cmake": true
+      }
+    },
+    "workspace": {
+      "scripts": {
+        "build": [
+          "pwsh ./scripts/build.ps1"
+        ],
+        "clean": [
+          "pwsh ./scripts/build.ps1 -clean"
+        ],
+        "copy": [
+          "pwsh ./scripts/copy.ps1 $0:?"
+        ],
+        "logcat": [
+          "pwsh ./scripts/start-logging.ps1"
+        ],
+        "qmod": [
+          "pwsh ./scripts/build.ps1",
+          "pwsh ./scripts/createqmod.ps1"
+        ],
+        "restart": [
+          "pwsh ./scripts/restart-game.ps1"
+        ],
+        "stack": [
+          "pwsh ./scripts/ndk-stack.ps1"
+        ],
+        "tomb": [
+          "pwsh ./scripts/pull-tombstone.ps1"
+        ]
+      },
+      "qmodIncludeDirs": [
+        "./build",
+        "./extern/libs"
+      ],
+      "qmodIncludeFiles": [],
+      "qmodOutput": "./CongXinJian.qmod"
+    },
+    "dependencies": [
+      {
+        "id": "scotland2",
+        "versionRange": "^0.1.4",
+        "additionalData": {
+          "includeQmod": false
+        }
+      },
+      {
+        "id": "beatsaber-hook",
+        "versionRange": "^6.4.0",
+        "additionalData": {}
+      },
+      {
+        "id": "bs-cordl",
+        "versionRange": "^4008.0.0",
+        "additionalData": {}
+      },
+      {
+        "id": "bsml",
+        "versionRange": "^0.4.0",
+        "additionalData": {}
+      },
+      {
+        "id": "custom-types",
+        "versionRange": "^0.18.0",
+        "additionalData": {}
+      }
+    ]
+  },
+  "restoredDependencies": [
+    {
+      "dependency": {
+        "id": "bsml",
+        "versionRange": "=0.4.55",
+        "additionalData": {
+          "soLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.55/libbsml.so",
+          "debugSoLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.55/debug_libbsml.so",
+          "overrideSoName": "libbsml.so",
+          "modLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.55/BSML.qmod",
+          "branchName": "version/v0_4_55",
+          "cmake": true
+        }
+      },
+      "version": "0.4.55"
+    },
+    {
+      "dependency": {
+        "id": "libil2cpp",
+        "versionRange": "=0.4.0",
+        "additionalData": {
+          "headersOnly": true,
+          "compileOptions": {
+            "systemIncludes": [
+              "il2cpp/external/baselib/Include",
+              "il2cpp/external/baselib/Platforms/Android/Include"
+            ]
+          }
+        }
+      },
+      "version": "0.4.0"
+    },
+    {
+      "dependency": {
+        "id": "paper2_scotland2",
+        "versionRange": "=4.7.0",
+        "additionalData": {
+          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.7.0/libpaper2_scotland2.so",
+          "overrideSoName": "libpaper2_scotland2.so",
+          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.7.0/paper2_scotland2.qmod",
+          "branchName": "version/v4_7_0",
+          "compileOptions": {
+            "systemIncludes": [
+              "shared/utfcpp/source"
+            ]
+          },
+          "cmake": false
+        }
+      },
+      "version": "4.7.0"
+    },
+    {
+      "dependency": {
+        "id": "custom-types",
+        "versionRange": "=0.18.4",
+        "additionalData": {
+          "soLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.4/libcustom-types.so",
+          "debugSoLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.4/debug_libcustom-types.so",
+          "overrideSoName": "libcustom-types.so",
+          "modLink": "https://github.com/QuestPackageManager/Il2CppQuestTypePatching/releases/download/v0.18.4/CustomTypes.qmod",
+          "branchName": "version/v0_18_4",
+          "compileOptions": {
+            "cppFlags": [
+              "-Wno-invalid-offsetof"
+            ]
+          },
+          "cmake": true
+        }
+      },
+      "version": "0.18.4"
+    },
+    {
+      "dependency": {
+        "id": "bs-cordl",
+        "versionRange": "=4008.0.0",
+        "additionalData": {
+          "headersOnly": true,
+          "branchName": "version/v4008_0_0",
+          "compileOptions": {
+            "includePaths": [
+              "include"
+            ],
+            "cppFeatures": [],
+            "cppFlags": [
+              "-DNEED_UNSAFE_CSHARP",
+              "-fdeclspec",
+              "-DUNITY_2021",
+              "-DHAS_CODEGEN",
+              "-Wno-invalid-offsetof"
+            ]
+          }
+        }
+      },
+      "version": "4008.0.0"
+    },
+    {
+      "dependency": {
+        "id": "beatsaber-hook",
+        "versionRange": "=6.4.2",
+        "additionalData": {
+          "soLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v6.4.2/libbeatsaber-hook.so",
+          "debugSoLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v6.4.2/debug_libbeatsaber-hook.so",
+          "overrideSoName": "libbeatsaber-hook.so",
+          "modLink": "https://github.com/QuestPackageManager/beatsaber-hook/releases/download/v6.4.2/beatsaber-hook.qmod",
+          "branchName": "version/v6_4_2",
+          "compileOptions": {
+            "cppFlags": [
+              "-Wno-extra-qualification"
+            ]
+          },
+          "cmake": true
+        }
+      },
+      "version": "6.4.2"
+    },
+    {
+      "dependency": {
+        "id": "scotland2",
+        "versionRange": "=0.1.7",
+        "additionalData": {
+          "soLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.7/libsl2.so",
+          "debugSoLink": "https://github.com/sc2ad/scotland2/releases/download/v0.1.7/debug_libsl2.so",
+          "overrideSoName": "libsl2.so",
+          "branchName": "version/v0_1_7"
+        }
+      },
+      "version": "0.1.7"
+    },
+    {
+      "dependency": {
+        "id": "fmt",
+        "versionRange": "=11.0.2",
+        "additionalData": {
+          "headersOnly": true,
+          "branchName": "version/v11_0_2",
+          "compileOptions": {
+            "systemIncludes": [
+              "fmt/include/"
+            ],
+            "cppFlags": [
+              "-DFMT_HEADER_ONLY"
+            ]
+          }
+        }
+      },
+      "version": "11.0.2"
+    },
+    {
+      "dependency": {
+        "id": "tinyxml2",
+        "versionRange": "=10.0.0",
+        "additionalData": {
+          "soLink": "https://github.com/MillzyDev/NDK-tinyxml2/releases/download/v10.0.0/libtinyxml2.so",
+          "debugSoLink": "https://github.com/MillzyDev/NDK-tinyxml2/releases/download/v10.0.0/debug_libtinyxml2.so",
+          "overrideSoName": "libtinyxml2.so",
+          "modLink": "https://github.com/MillzyDev/NDK-tinyxml2/releases/download/v10.0.0/tinyxml2.qmod",
+          "branchName": "version/v10_0_0",
+          "cmake": true
+        }
+      },
+      "version": "10.0.0"
+    }
+  ]
+}
