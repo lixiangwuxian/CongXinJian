@@ -37,6 +37,9 @@ env:
     module_id: "CongXinJian"
     qmod_name: "CongXinJian"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
