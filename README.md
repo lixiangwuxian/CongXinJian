@@ -2,7 +2,7 @@
 
 [中文](README_CN.md)
 
-This is an offset adjustment mod for Beat Saber on Quest, which helps you tweak your sabers more easily in-game. Heavily inspired by: [Easy Offset](https://github.com/Reezonate/EasyOffset)
+This is a saber offset adjustment mod for Beat Saber on Quest, which helps you tweak your sabers more easily in-game. Heavily inspired by: [Easy Offset](https://github.com/Reezonate/EasyOffset)
 
 Use `qpm s build` to build
 Same goes for `qpm s copy` and `qpm s qmod`
