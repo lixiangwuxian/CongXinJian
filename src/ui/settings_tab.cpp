@@ -55,6 +55,22 @@ constexpr std::array<ControllerButton, 5> kButtonValues = {
     ControllerButton::PrimaryButton, ControllerButton::SecondaryButton
 };
 
+// Slot names are generated at runtime from I18n().slotNameFmt (which uses "%s"
+// as placeholder). Storage holds the owning std::strings; kSlotNames are
+// non-owning string_views into that storage, matching the shape BSML::Lite
+// dropdowns expect for the other arrays above.
+std::array<std::string, kSlotCount> g_slotNameStorage{};
+std::array<std::string_view, kSlotCount> kSlotNames{};
+
+std::string FormatSlotName(std::string_view fmt, int n) {
+    std::string out(fmt);
+    auto pos = out.find("%s");
+    if (pos != std::string::npos) {
+        out.replace(pos, 2, std::to_string(n));
+    }
+    return out;
+}
+
 int ModeToIndex(AdjustmentMode m) {
     for (int i = 0; i < (int)kModeValues.size(); ++i)
         if (kModeValues[i] == m) return i;
@@ -72,6 +88,10 @@ void SyncDropdownStrings() {
     kModeNames = {s.modeDisabled, s.modeManualPos, s.modeManualRot, s.modeManual6DOF,
                   s.modeAutoPos, s.modeAutoRot};
     kButtonNames = {s.btnThumbstick, s.btnTrigger, s.btnGrip, s.btnPrimary, s.btnSecondary};
+    for (int i = 0; i < kSlotCount; ++i) {
+        g_slotNameStorage[i] = FormatSlotName(s.slotNameFmt, i + 1);
+        kSlotNames[i] = g_slotNameStorage[i];
+    }
 }
 
 // ── State ───────────────────────────────────────────────────────────────
@@ -82,6 +102,7 @@ UnityEngine::UI::Button* g_leftBtn = nullptr;
 UnityEngine::UI::Button* g_rightBtn = nullptr;
 BSML::DropdownListSetting* g_modeDropdown = nullptr;
 BSML::DropdownListSetting* g_buttonDropdown = nullptr;
+BSML::DropdownListSetting* g_slotDropdown = nullptr;
 UnityEngine::UI::Button* g_mirrorBtn = nullptr;
 
 void CommitAndRefresh() {
@@ -225,22 +246,54 @@ void BuildTabContent(UnityEngine::GameObject* container, bool firstActivation) {
                 CommitAndRefresh();
         }));
         }
-            // ── Assigned button dropdown ────────────────────────────────────
-        g_buttonDropdown = BSML::Lite::CreateDropdown(vl_transform, StringW(s.assignedButton),
-            StringW(kButtonNames[ButtonToIndex(cfg.assignedButton)]),
-            kButtonNames,
-            std::function<void(StringW)>([](StringW val) {
-                std::string s(val);
-                PaperLogger.info("ButtonDropdown: '{}'", s);
-                for (int i = 0; i < (int)kButtonNames.size(); ++i) {
-                    if (s == kButtonNames[i]) {
-                        GetTweakConfig().assignedButton = kButtonValues[i];
-                        break;
+            // ── Assigned button dropdown + Slot dropdown (same row) ─────────
+        {
+            auto* btnRow = BSML::Lite::CreateHorizontalLayoutGroup(vl_transform);
+            btnRow->set_childForceExpandWidth(false);
+            auto brp = btnRow->get_transform();
+
+            // Assigned button — left half
+            auto* btnVert = BSML::Lite::CreateVerticalLayoutGroup(brp);
+            btnVert->get_gameObject()->AddComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(50.0f);
+            g_buttonDropdown = BSML::Lite::CreateDropdown(btnVert->get_transform(), StringW(s.assignedButton),
+                StringW(kButtonNames[ButtonToIndex(cfg.assignedButton)]),
+                kButtonNames,
+                std::function<void(StringW)>([](StringW val) {
+                    std::string s(val);
+                    PaperLogger.info("ButtonDropdown: '{}'", s);
+                    for (int i = 0; i < (int)kButtonNames.size(); ++i) {
+                        if (s == kButtonNames[i]) {
+                            GetTweakConfig().assignedButton = kButtonValues[i];
+                            break;
+                        }
                     }
-                }
-                CommitAndRefresh();
-            })
-        );
+                    CommitAndRefresh();
+                })
+            );
+
+            // Slot selector — right half
+            auto* slotVert = BSML::Lite::CreateVerticalLayoutGroup(brp);
+            slotVert->get_gameObject()->AddComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(50.0f);
+            int curSlotIdx = cfg.activeSlot - 1;
+            if (curSlotIdx < 0 || curSlotIdx >= kSlotCount) curSlotIdx = 0;
+            g_slotDropdown = BSML::Lite::CreateDropdown(slotVert->get_transform(), StringW(s.slotLabel),
+                StringW(kSlotNames[curSlotIdx]),
+                kSlotNames,
+                std::function<void(StringW)>([](StringW val) {
+                    std::string s(val);
+                    PaperLogger.info("SlotDropdown: '{}'", s);
+                    for (int i = 0; i < kSlotCount; ++i) {
+                        if (s == kSlotNames[i]) {
+                            SwitchToSlot(i + 1);
+                            OffsetController::Refresh();
+                            SyncIncrements();
+                            UpdateHandButtonColors();
+                            break;
+                        }
+                    }
+                })
+            );
+        }
 
         // ── Hand selector ───────────────────────────────────────────────
         {
@@ -356,6 +409,7 @@ void RebuildSettingsTab() {
     g_rightBtn = nullptr;
     g_modeDropdown = nullptr;
     g_buttonDropdown = nullptr;
+    g_slotDropdown = nullptr;
     g_mirrorBtn = nullptr;
 
     // Rebuild with fresh strings

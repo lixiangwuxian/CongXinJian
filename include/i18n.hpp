@@ -25,6 +25,8 @@ struct I18nStrings {
     const char* enable;
     const char* adjustment;
     const char* assignedButton;
+    const char* slotLabel;      // dropdown title: "Config Slot" / "配置槽位"
+    const char* slotNameFmt;    // format for each slot entry — "Slot %s" / "槽位 %s"
 
     // Hand selector
     const char* leftHand;

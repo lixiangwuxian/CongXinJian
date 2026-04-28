@@ -25,6 +25,8 @@ const I18nStrings kChinese = {
     "启用",
     "调整",
     "按键绑定",
+    "槽位",
+    "槽位 %s",
 
     // Hand selector
     " 左手",
@@ -73,6 +75,8 @@ const I18nStrings kEnglish = {
     "Enable",
     "Mode",
     "Button",
+    "Slot",
+    "Slot %s",
 
     // Hand selector
     " Left",

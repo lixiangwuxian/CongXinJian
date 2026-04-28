@@ -44,13 +44,20 @@ struct HandTweakConfig {
 
 // ── Root config ─────────────────────────────────────────────────────────
 
+// Number of independent saber-offset slots. Slot files live at
+// `<modDir>/slots/slot<1..kSlotCount>.json` and contain ONLY left/right
+// hand offset data. Global settings (enable, mode, button, language,
+// activeSlot) stay in the main `config.json`.
+inline constexpr int kSlotCount = 3;
+
 struct OffsetConfig {
     bool enabled{true};
     HandTweakConfig left{};
     HandTweakConfig right{};
     AdjustmentMode adjustmentMode{AdjustmentMode::None};
     ControllerButton assignedButton{ControllerButton::Trigger};
-    int language{1};  // 0=Chinese, 1=English (default)
+    int language{1};       // 0=Chinese, 1=English (default)
+    int activeSlot{1};     // 1..kSlotCount — which slot's offsets are currently loaded into memory
 };
 
 // Saber mesh forward direction in VRController local space.
@@ -69,6 +76,14 @@ inline constexpr float kMenuHandleOffZ = 0.055f;
 OffsetConfig& GetTweakConfig();
 void LoadTweakConfig();
 void SaveTweakConfig();
+
+// ── Slot API ────────────────────────────────────────────────────────────
+// Switch the active slot: persists current left/right to the old slot file,
+// then loads the new slot file into g_config.left/right (defaults if absent)
+// and writes the new activeSlot to config.json.
+// Caller is responsible for calling OffsetController::Refresh() and any UI
+// sync after this returns.
+void SwitchToSlot(int slot);
 
 // Sync helpers (require il2cpp — only call after late_load).
 void SyncQuatFromEuler(HandTweakConfig& cfg);
