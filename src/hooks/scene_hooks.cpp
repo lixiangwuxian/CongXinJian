@@ -11,11 +11,16 @@ bool g_inMenu = true;  // We load during menu, so default is true.
 // Song selection screen visible. The level scene hooks only cover standard
 // levels, so this also guards multiplayer / campaign / tutorial gameplay.
 bool g_inSongSelect = false;
+// Also polled directly: the menu scene is deactivated during gameplay, so
+// this stays correct even if a transition event is missed.
+UnityW<GlobalNamespace::LevelSelectionNavigationController> g_songSelect;
 }
 
 namespace SceneTracker {
 bool IsInMenu() { return g_inMenu; }
-bool IsInSongSelect() { return g_inMenu && g_inSongSelect; }
+bool IsInSongSelect() {
+    return g_inMenu && g_inSongSelect && g_songSelect && g_songSelect->get_isActiveAndEnabled();
+}
 }
 
 // ── Entering gameplay ───────────────────────────────────────────────────
@@ -77,6 +82,7 @@ MAKE_HOOK_MATCH(
     bool screenSystemEnabling) {
     LSNC_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
     g_inSongSelect = true;
+    g_songSelect = self;
     PaperLogger.info("Scene: song selection shown");
 }
 
