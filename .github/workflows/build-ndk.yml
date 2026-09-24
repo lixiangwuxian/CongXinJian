@@ -53,8 +53,8 @@ jobs:
 
     - uses: seanmiddleditch/gha-setup-ninja@v3
 
-    # Use canary NDK to avoid lesser known compile bugs
-    - name: Setup canary NDK
+    # NDK r29 (29.0.14206865) is required by bs-cordl 4500 / beatsaber-hook 8
+    - name: Setup NDK r29
       id: setup-ndk
       uses: ./.github/actions/canary-ndk
 

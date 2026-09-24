@@ -76,14 +76,14 @@ void WriteHand(rapidjson::Value& dst, HandTweakConfig const& hand,
 // ── Slot file paths ─────────────────────────────────────────────────────
 
 // Returns the slots directory path. Uses bs-utils' persistent data dir
-// (getDataDir), which expands to
+// (get_data_dir), which expands to
 //   /sdcard/ModData/com.beatgames.beatsaber/Mods/<MOD_ID>/
 // and appends "slots" as a subdirectory. Note that this is a different
 // location from config.json (which lives under /Configs/) — slots hold
 // mutable user data, so the persistent data dir is the right home.
 std::string GetSlotsDir() {
-    // getDataDir returns a path with a trailing '/'.
-    return getDataDir(getConfig().info) + "slots";
+    // get_data_dir returns a path with a trailing '/'.
+    return get_data_dir(getConfig().info) + "slots";
 }
 
 std::string GetSlotFilePath(int slot) {
@@ -91,8 +91,8 @@ std::string GetSlotFilePath(int slot) {
 }
 
 void EnsureSlotsDir() {
-    // Create parent dir first (getDataDir does NOT mkdir automatically).
-    std::string dataDir = getDataDir(getConfig().info);
+    // Create parent dir first (get_data_dir does NOT mkdir automatically).
+    std::string dataDir = get_data_dir(getConfig().info);
     // dataDir has trailing '/'; strip it for mkdir.
     if (!dataDir.empty() && dataDir.back() == '/') dataDir.pop_back();
     ::mkdir(dataDir.c_str(), 0755);  // ignore EEXIST

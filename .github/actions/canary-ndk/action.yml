@@ -1,5 +1,5 @@
-name: "Setup canary ndk"
-description: "Sets up canary ndk"
+name: "Setup ndk"
+description: "Sets up Android NDK r29"
 outputs:
   ndk-path:
     value: ${{ steps.path.outputs.path }}
@@ -14,14 +14,14 @@ runs:
       id: cache
       uses: actions/cache@v3
       with:
-        path: ${HOME}/android-ndk-r27-canary/
-        key: ${{ runner.os }}-ndk-r27-canary
+        path: ${HOME}/android-ndk-r29/
+        key: ${{ runner.os }}-ndk-r29
 
-    - name: Download canary ndk
+    - name: Download ndk
       if: ${{ !steps.cache.outputs.cache-hit }}
       env:
-        CANARY_URL: https://github.com/QuestPackageManager/ndk-canary-archive/releases/download/27.0.1/android-ndk-10883340-linux-x86_64.zip
-      run: wget ${CANARY_URL} -O ${HOME}/ndk.zip
+        NDK_URL: https://dl.google.com/android/repository/android-ndk-r29-linux.zip
+      run: wget ${NDK_URL} -O ${HOME}/ndk.zip
       shell: bash
 
     - name: Unzip ndk
@@ -32,4 +32,4 @@ runs:
     - name: Set output
       id: path
       shell: bash
-      run: echo "path=${HOME}/android-ndk-r27-canary" >> ${GITHUB_OUTPUT}
+      run: echo "path=${HOME}/android-ndk-r29" >> ${GITHUB_OUTPUT}

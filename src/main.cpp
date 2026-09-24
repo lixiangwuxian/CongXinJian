@@ -30,7 +30,7 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
   Paper::Logger::RegisterFileContextId(PaperLogger.tag);
 
   // Load the JSON config now (no il2cpp calls), but defer the offset cache
-  // refresh until late_load when il2cpp_functions::Init() has run -- otherwise
+  // refresh until late_load when i2c::functions::initialize() has run -- otherwise
   // Quaternion::Euler / op_Multiply tries to look up Unity types too early.
   LoadTweakConfig();
 
@@ -39,7 +39,7 @@ MOD_EXTERN_FUNC void setup(CModInfo *info) noexcept {
 
 // Called later on in the game loading - a good time to install function hooks
 MOD_EXTERN_FUNC void late_load() noexcept {
-  il2cpp_functions::Init();
+  i2c::functions::initialize();
 
   OffsetController::Refresh();
 
