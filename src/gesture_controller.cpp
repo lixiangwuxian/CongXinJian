@@ -442,7 +442,7 @@ void OnControllerUpdate(XRNode node, Vec3 rawPos, Quat rawRot,
 
     bool active = cfg.enabled &&
                   cfg.adjustmentMode != AdjustmentMode::None &&
-                  SceneTracker::IsInMenu();
+                  SceneTracker::IsInSongSelect();
 
     bool btnDown = active && IsButtonDown(cfg.assignedButton, node);
     bool btnJustPressed = btnDown && !g_btnHeldDown[hi];

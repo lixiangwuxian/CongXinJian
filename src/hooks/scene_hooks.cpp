@@ -4,13 +4,18 @@
 #include "GlobalNamespace/MenuTransitionsHelper.hpp"
 #include "GlobalNamespace/StandardLevelScenesTransitionSetupData.hpp"
 #include "GlobalNamespace/LevelCompletionResults.hpp"
+#include "GlobalNamespace/LevelSelectionNavigationController.hpp"
 
 namespace {
 bool g_inMenu = true;  // We load during menu, so default is true.
+// Song selection screen visible. The level scene hooks only cover standard
+// levels, so this also guards multiplayer / campaign / tutorial gameplay.
+bool g_inSongSelect = false;
 }
 
 namespace SceneTracker {
 bool IsInMenu() { return g_inMenu; }
+bool IsInSongSelect() { return g_inMenu && g_inSongSelect; }
 }
 
 // ── Entering gameplay ───────────────────────────────────────────────────
@@ -61,9 +66,37 @@ MAKE_HOOK_MATCH(
     PaperLogger.info("Scene: back to menu (Finish)");
 }
 
+// ── Song selection screen ───────────────────────────────────────────────
+MAKE_HOOK_MATCH(
+    LSNC_DidActivate,
+    &GlobalNamespace::LevelSelectionNavigationController::DidActivate,
+    void,
+    GlobalNamespace::LevelSelectionNavigationController* self,
+    bool firstActivation,
+    bool addedToHierarchy,
+    bool screenSystemEnabling) {
+    LSNC_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
+    g_inSongSelect = true;
+    PaperLogger.info("Scene: song selection shown");
+}
+
+MAKE_HOOK_MATCH(
+    LSNC_DidDeactivate,
+    &GlobalNamespace::LevelSelectionNavigationController::DidDeactivate,
+    void,
+    GlobalNamespace::LevelSelectionNavigationController* self,
+    bool removedFromHierarchy,
+    bool screenSystemDisabling) {
+    LSNC_DidDeactivate(self, removedFromHierarchy, screenSystemDisabling);
+    g_inSongSelect = false;
+    PaperLogger.info("Scene: song selection hidden");
+}
+
 namespace SceneTracker {
 void InstallHooks() {
     INSTALL_HOOK(PaperLogger, SLSTSD_Init);
     INSTALL_HOOK(PaperLogger, SLSTSD_Finish);
+    INSTALL_HOOK(PaperLogger, LSNC_DidActivate);
+    INSTALL_HOOK(PaperLogger, LSNC_DidDeactivate);
 }
 }
